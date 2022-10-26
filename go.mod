@@ -1,4 +1,4 @@
-module GermanPostcodes
+module github.com/nico-bock/GermanPostcodes
 
 go 1.19
 
