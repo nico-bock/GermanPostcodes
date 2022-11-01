@@ -74,7 +74,7 @@ func GetStateFromZipCode(zipcodePath, postcode string) (State, error) {
 func (z ZipcodeFinder) GetStateFromZipCode(postcode string) (State, error) {
 
 	if ZipcodeData, containts := z.ZipcodeMap[postcode]; containts {
-		return State(ZipcodeData[0].State), nil
+		return State(ZipcodeData[0].State), nil //todo check if one state is enought as return value
 	}
 	return "", errors.New("Zipcode not found")
 }
