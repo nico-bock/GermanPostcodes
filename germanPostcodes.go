@@ -6,8 +6,6 @@ import (
 	"os"
 )
 
-type state string
-
 type ZipcodeDateset struct {
 	CountryCode   string `json:"country_code"`
 	Zipcode       string `json:"zipcode"`
@@ -59,22 +57,22 @@ func GetZipCodeMap() (map[string][]*ZipcodeDateset, error) {
 
 }
 
-func GetStateFromZipCode(postcode string) (state, error) {
+func GetStateFromZipCode(postcode string) (string, error) {
 	GermanZipcodeMap, err := GetZipCodeMap()
 	if err != nil {
 		return "", errors.Wrap(err, "Failed to load ZicodeData")
 	}
 
 	if ZipcodeData, containts := GermanZipcodeMap[postcode]; containts {
-		return state(ZipcodeData[0].State), nil
+		return ZipcodeData[0].State, nil
 	}
 	return "", errors.New("Zipcode not found")
 }
 
-func (z ZipcodeFinder) GetStateFromZipCode(postcode string) (state, error) {
+func (z ZipcodeFinder) GetStateFromZipCode(postcode string) (string, error) {
 
 	if ZipcodeData, containts := z.ZipcodeMap[postcode]; containts {
-		return state(ZipcodeData[0].State), nil
+		return ZipcodeData[0].State, nil
 	}
 	return "", errors.New("Zipcode not found")
 }
