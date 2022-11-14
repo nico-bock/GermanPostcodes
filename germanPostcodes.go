@@ -23,24 +23,24 @@ type ZipcodeFinder struct {
 	ZipcodeMap map[string][]*ZipcodeDateset
 }
 
-func InitZipcodeFinder() (ZipcodeFinder, error) {
+func InitZipcodeFinder(baseFilePath string) (ZipcodeFinder, error) {
 	this := ZipcodeFinder{}
 	var err error
-	this.ZipcodeMap, err = GetZipCodeMap()
+	this.ZipcodeMap, err = GetZipCodeMap(baseFilePath)
 	if err != nil {
 		return this, errors.Wrap(err, "Failed to loadZipcodeDate")
 	}
 	return this, nil
 }
 
-func GetZipCodeMap() (map[string][]*ZipcodeDateset, error) {
+func GetZipCodeMap(baseFilePath string) (map[string][]*ZipcodeDateset, error) {
 
-	data, err := os.ReadFile("DE/zipcodes.de.json")
+	data, err := os.ReadFile(baseFilePath)
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed to Load ZipcodeJSON")
 	}
 	GermanZipcodes := make([]*ZipcodeDateset, 0)
-	err = json.Unmarshal(data, GermanZipcodes)
+	err = json.Unmarshal(data, &GermanZipcodes)
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed to unmarshall ZipcodeJSON")
 	}
@@ -57,8 +57,8 @@ func GetZipCodeMap() (map[string][]*ZipcodeDateset, error) {
 
 }
 
-func GetStateFromZipCode(postcode string) (string, error) {
-	GermanZipcodeMap, err := GetZipCodeMap()
+func GetStateFromZipCode(postcode, baseFilePath string) (string, error) {
+	GermanZipcodeMap, err := GetZipCodeMap(baseFilePath)
 	if err != nil {
 		return "", errors.Wrap(err, "Failed to load ZicodeData")
 	}
